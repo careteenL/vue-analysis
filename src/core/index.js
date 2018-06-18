@@ -1,3 +1,4 @@
+// 从vue出生文件导入vue
 import Vue from './instance/index'
 import { initGlobalAPI } from './global-api/index'
 import { isServerRendering } from 'core/util/env'
