@@ -187,6 +187,8 @@ export function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+  // 我们将它设置为vm._watcher在观察者的构造函数中，
+  // 因为观察者的初始补丁可能调用$forceUpdate(例如，在子组件的挂载钩子中)，它依赖于vm._watcher已经被定义
   new Watcher(vm, updateComponent, noop, {
     before () {
       if (vm._isMounted) {
@@ -198,6 +200,7 @@ export function mountComponent (
 
   // manually mounted instance, call mounted on self
   // mounted is called for render-created child components in its inserted hook
+  // `vm.$vnode`表示`Vue`实例的父虚拟`Node`，为null时表示为根节点
   if (vm.$vnode == null) {
     vm._isMounted = true
     callHook(vm, 'mounted')

@@ -17,6 +17,10 @@ import {
   defineReactive
 } from '../util/index'
 
+/**
+ * 
+ * @desc 为 Vue 扩展全局的静态方法
+ */ 
 export function initGlobalAPI (Vue: GlobalAPI) {
   // config
   const configDef = {}
@@ -33,6 +37,11 @@ export function initGlobalAPI (Vue: GlobalAPI) {
   // exposed util methods.
   // NOTE: these are not considered part of the public API - avoid relying on
   // them unless you are aware of the risk.
+  /**
+   * 
+   * @desc 
+   * @note Vue.util 暴露的方法最好不要依赖，因为他可能经常会发生变化，是不稳定的。
+   */ 
   Vue.util = {
     warn,
     extend,

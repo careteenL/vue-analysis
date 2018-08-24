@@ -33,6 +33,7 @@ export function initMixin (Vue: Class<Component>) {
       // optimize internal component instantiation
       // since dynamic options merging is pretty slow, and none of the
       // internal component options needs special treatment.
+      // 优化内部组件实例化，因为动态选项合并非常缓慢，而且内部组件选项都不需要特殊处理。
       initInternalComponent(vm, options)
     } else {
       vm.$options = mergeOptions(
@@ -65,6 +66,7 @@ export function initMixin (Vue: Class<Component>) {
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
 
+    // 挂载的目标：就是把模板渲染成最终的`DOM`。
     if (vm.$options.el) {
       vm.$mount(vm.$options.el)
     }
