@@ -681,7 +681,11 @@ export function createPatchFunction (backend) {
       return node.nodeType === (vnode.isComment ? 8 : 3)
     }
   }
-
+  // 核心部分
+  // `oldVnode`表示旧的节点，可不存在或为一个`DOM`对象
+  // `vnode`表示执行`_render`后返回的`VNode`的节点
+  // `hydrating`表示是否是服务端渲染
+  // `removeOnly`是给`transition-group`用的
   return function patch (oldVnode, vnode, hydrating, removeOnly) {
     if (isUndef(vnode)) {
       if (isDef(oldVnode)) invokeDestroyHook(oldVnode)
