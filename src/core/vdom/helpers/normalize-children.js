@@ -5,16 +5,24 @@ import { isFalse, isTrue, isDef, isUndef, isPrimitive } from 'shared/util'
 
 // The template compiler attempts to minimize the need for normalization by
 // statically analyzing the template at compile time.
+// 模板编译器试图通过在编译时静态分析模板来最小化规范化的需求。
 //
 // For plain HTML markup, normalization can be completely skipped because the
 // generated render function is guaranteed to return Array<VNode>. There are
 // two cases where extra normalization is needed:
+// 对于纯HTML标记，可以完全跳过规范化，因为生成的呈现函数保证返回数组。有两种情况需要额外的规范化:
 
 // 1. When the children contains components - because a functional component
 // may return an Array instead of a single root. In this case, just a simple
 // normalization is needed - if any child is an Array, we flatten the whole
 // thing with Array.prototype.concat. It is guaranteed to be only 1-level deep
 // because functional components already normalize their own children.
+// 1、当子组件包含组件时——因为函数组件可能返回一个数组而不是一个根。
+// 在这种情况下，只需要一个简单的规范化就可以了——如果任何一个子数组是一个数组，
+// 我们就用Array.prototype.concat将整个东西压平。
+// 它保证只有1级的深度，因为功能组件已经规范了它们自己的子组件。
+
+// 此方法调用场景是`render`函数式编译生成的
 export function simpleNormalizeChildren (children: any) {
   for (let i = 0; i < children.length; i++) {
     if (Array.isArray(children[i])) {
@@ -28,6 +36,12 @@ export function simpleNormalizeChildren (children: any) {
 // e.g. <template>, <slot>, v-for, or when the children is provided by user
 // with hand-written render functions / JSX. In such cases a full normalization
 // is needed to cater to all possible types of children values.
+
+// 此方法调用场景有两种
+// 其一：`render`函数使用户手写的
+// 当`children`只有一个节点的时候，`Vue.js`从接口层面允许用户把`children`写成基础类型用来创建单个简单的文本节点，
+// 这种情况会调用`createTextVNode`创建一个文本节点的`VNode`；
+// 其二：当编译`slot`、`v-for`的时候会产生嵌套数组的情况,会调用`normalizeArrayChildren`方法
 export function normalizeChildren (children: any): ?Array<VNode> {
   return isPrimitive(children)
     ? [createTextVNode(children)]
@@ -40,6 +54,14 @@ function isTextNode (node): boolean {
   return isDef(node) && isDef(node.text) && isFalse(node.isComment)
 }
 
+// 有点懵逼，还是不太理解
+// 主要的逻辑就是遍历 children，获得单个节点 c，然后对 c 的类型判断，
+// 如果是一个数组类型，则递归调用 normalizeArrayChildren; 
+// 如果是基础类型，则通过 createTextVNode 方法转换成 VNode 类型；
+// 否则就已经是 VNode 类型了，如果 children 是一个列表并且列表还存在嵌套的情况，
+// 则根据 nestedIndex 去更新它的 key。
+// 这里需要注意一点，在遍历的过程中，对这 3 种情况都做了如下处理：
+// 如果存在两个连续的 text 节点，会把它们合并成一个 text 节点。
 function normalizeArrayChildren (children: any, nestedIndex?: string): Array<VNode> {
   const res = []
   let i, c, lastIndex, last

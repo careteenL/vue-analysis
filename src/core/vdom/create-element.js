@@ -30,6 +30,7 @@ export function createElement (
   tag: any,
   data: any,
   children: any,
+  // 子节点规范的类型，类型不同规范的方法也就不一样，它主要参考`render`函数式编译生成的还是用户手写的
   normalizationType: any,
   alwaysNormalize: boolean
 ): VNode | Array<VNode> {
@@ -52,11 +53,13 @@ export function _createElement (
   normalizationType?: number
 ): VNode | Array<VNode> {
   if (isDef(data) && isDef((data: any).__ob__)) {
-    process.env.NODE_ENV !== 'production' && warn(
-      `Avoid using observed data object as vnode data: ${JSON.stringify(data)}\n` +
-      'Always create fresh vnode data objects in each render!',
-      context
-    )
+    // 为了后续代码正常显示而注释 不行你放开注释看看 Orz
+    // process.env.NODE_ENV !== 'production' && warn(
+    //   `Avoid using observed data object as vnode data: ${JSON.stringify(data)}\n` +
+    //   'Always create fresh vnode data objects in each render!',
+    //   context
+    // )
+
     return createEmptyVNode()
   }
   // object syntax in v-bind
@@ -87,11 +90,13 @@ export function _createElement (
     data.scopedSlots = { default: children[0] }
     children.length = 0
   }
+  // 规范化`children`
   if (normalizationType === ALWAYS_NORMALIZE) {
     children = normalizeChildren(children)
   } else if (normalizationType === SIMPLE_NORMALIZE) {
     children = simpleNormalizeChildren(children)
   }
+  // 创建`vnode`实例
   let vnode, ns
   if (typeof tag === 'string') {
     let Ctor
