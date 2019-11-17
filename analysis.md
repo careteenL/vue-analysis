@@ -32,6 +32,12 @@
 
 ### 数据驱动
 
+### 简版实现
+
+- [@careteen/vue](https://github.com/careteenL/vue)
+
 ### 引用
 
 - [Vue.js 技术揭秘](https://ustbhuangyi.github.io/vue-analysis/prepare/)
+- [Vue源码 & 前端进阶体系](https://cloud.tencent.com/developer/column/79378/tag-10197)
+
